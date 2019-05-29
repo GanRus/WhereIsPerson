@@ -10,17 +10,11 @@ using System.Windows.Forms;
 
 namespace WhereIsPerson
 {
-    public partial class MainForm : Form
+    public partial class SettingsForm : Form
     {
-        public MainForm()
+        public SettingsForm()
         {
             InitializeComponent();
-        }
-
-        private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.Show();
         }
     }
 }
