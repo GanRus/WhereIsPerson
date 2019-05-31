@@ -9,48 +9,13 @@ namespace WhereIsPerson
         public SettingsForm()
         {
             InitializeComponent();
-            OpenConfigFile();
 
-        }
+            ConfigFile.OpenConfigFile();
 
-        //метод считывания настроек с конфигурационного файла
-        private void OpenConfigFile()
-        {
-            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
-            if (File.Exists(path))
-            {
-                string[] settings = File.ReadAllLines(path);
-
-                for (int i = 0; i < settings.Length; i++)
-                {
-                    settings[i] = settings[i].Substring(settings[i].IndexOf('=') + 1);
-                }
-                ipTxt.Text = settings[0];
-                userTxt.Text = settings[1];
-                passTxt.Text = settings[2];
-                pathToDBtxt.Text = settings[3];
-            }
-        }
-
-        //метод сохранения настроек в конфигурационном файле
-        private void SaveConfigFile()
-        {
-            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
-            //MessageBox.Show(path);
-
-            //массив настроек
-            string[] settings = new String[4];
-
-            settings[0] = "IPADDR=" + ipTxt.Text;
-            settings[1] = "USER=" + userTxt.Text;
-            settings[2] = "PASS=" + passTxt.Text;
-            settings[3] = "PATH=" + pathToDBtxt.Text;
-
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-            File.AppendAllLines(path, settings);
+            ipTxt.Text = GlobalVariable.ip_addr;
+            userTxt.Text = GlobalVariable.user;
+            passTxt.Text = GlobalVariable.pass;
+            pathToDBtxt.Text = GlobalVariable.pathDB;
         }
 
         private void openFileDialogBtn_Click(object sender, EventArgs e)
@@ -61,13 +26,19 @@ namespace WhereIsPerson
 
         private void okBtn_Click(object sender, EventArgs e)
         {
-            SaveConfigFile();
-            this.Close();
+            GlobalVariable.ip_addr = ipTxt.Text;
+            GlobalVariable.user = userTxt.Text;
+            GlobalVariable.pass = passTxt.Text;
+            GlobalVariable.pathDB = pathToDBtxt.Text;
+
+            ConfigFile.SaveConfigFile();
+
+            Close();
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
     }

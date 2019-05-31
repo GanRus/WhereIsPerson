@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +14,53 @@ namespace WhereIsPerson
 {
     public partial class MainForm : Form
     {
-        FbConnection dbConnect;
 
+        public MainForm()
+        {
+            InitializeComponent();
+
+
+            //соединяем с базой данных
+            DataBase.OpenDBConnection();
+
+            if (DataBase.GetConnectionState())
+            {
+                MessageLbl.Text = "Соединение с БД успешно установлено!";
+            }
+            else
+            {
+                MessageLbl.Text = "Не удалось соединиться с указанной базой данных! Проверьте настройки подключения!";
+            }
+        }
+
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.Show();
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void SearchBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ClearBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    public static class DataBase //класс для работы с базой данных
+    {
+        static FbConnection dbConnect;
         //метод подключения к базе данных
-        private void OpenDBConnection()
-           // private void OpenDBConnection(string source, string db, string user, string pass)
+        public static void OpenDBConnection()
+        // private void OpenDBConnection(string source, string db, string user, string pass)
         {
             try
             {
@@ -38,31 +81,87 @@ namespace WhereIsPerson
 
                 dbConnect = new FbConnection(dbsource);
                 dbConnect.Open();
-
             }
             catch (Exception)
             {
                 dbConnect = null;
-
-
+                //тут надо что то придумать     
             }
         }
 
-        public MainForm()
+        // состояние подключения
+        public static bool GetConnectionState()
         {
-            InitializeComponent();
-            OpenDBConnection();
+            GlobalVariable.connection_on = false;
+
+            try
+            {
+                if (dbConnect.State == ConnectionState.Open)
+                {
+                    GlobalVariable.connection_on = true;
+                    return GlobalVariable.connection_on;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Log(ex);
+            }
+
+            return GlobalVariable.connection_on;
         }
 
-        private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
+    }
+
+    public static class ConfigFile //класс работы с конфигурационным файлом
+    {
+        //метод считывания настроек с конфигурационного файла
+        public static void OpenConfigFile()
         {
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.Show();
+            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
+            if (File.Exists(path))
+            {
+                string[] settings = File.ReadAllLines(path);
+
+                for (int i = 0; i < settings.Length; i++)
+                {
+                    settings[i] = settings[i].Substring(settings[i].IndexOf('=') + 1);
+                }
+                GlobalVariable.ip_addr = settings[0];
+                GlobalVariable.user = settings[1];
+                GlobalVariable.pass = settings[2];
+                GlobalVariable.pathDB = settings[3];
+            }
         }
 
-        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        //метод сохранения настроек в конфигурационном файле
+        public static void SaveConfigFile()
         {
-            this.Close();
+            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
+            //MessageBox.Show(path);
+
+            //массив настроек
+            string[] settings = new String[4];
+
+            settings[0] = "IPADDR=" + GlobalVariable.ip_addr;
+            settings[1] = "USER=" + GlobalVariable.user;
+            settings[2] = "PASS=" + GlobalVariable.pass;
+            settings[3] = "PATH=" + GlobalVariable.pathDB;
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            File.AppendAllLines(path, settings);
         }
+    }
+
+    public static class GlobalVariable //класс для хранения глобальных переменных
+    {
+        //static FbConnection dbConnect;
+        public static bool connection_on;
+        public static string ip_addr;
+        public static string user;
+        public static string pass;
+        public static string pathDB;
     }
 }
