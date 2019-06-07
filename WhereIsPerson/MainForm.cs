@@ -19,17 +19,37 @@ namespace WhereIsPerson
         {
             InitializeComponent();
 
+            ConfigFile.OpenConfigFile();
 
             //соединяем с базой данных
-            DataBase.OpenDBConnection();
+            DataBase.OpenDBConnection(GlobalVariable.ip_addr, GlobalVariable.pathDB, GlobalVariable.user, GlobalVariable.pass);
 
+            //если соединение установлено
             if (DataBase.GetConnectionState())
             {
-                MessageLbl.Text = "Соединение с БД успешно установлено!";
-            }
-            else
-            {
-                MessageLbl.Text = "Не удалось соединиться с указанной базой данных! Проверьте настройки подключения!";
+                FbCommand profQuery = new FbCommand("SELECT NAME FROM PROFESSION ORDER BY NAME", DataBase.dbConnect);
+
+                MessageBox.Show("test");
+
+                if (GlobalVariable.connection_on)
+                {
+                    FbTransaction fbt = DataBase.dbConnect.BeginTransaction();
+                    //profQuery.Dispose();
+                    profQuery.Transaction = fbt;
+                    FbDataReader reader = profQuery.ExecuteReader();//для запросов, которые возвращают результат в виде набора данных надо использоваться метод ExecuteReader()
+
+                    //for (int i = 0; i < reader.GetString(0).Length; i++)
+                    //{
+                    //    ProfCmbBox.Items.Add()
+                    //}
+
+                    while (reader.Read())
+                    {
+                        ProfCmbBox.Items.Add(reader.GetString(0).ToString());
+                    }
+
+
+                }
             }
         }
 
@@ -53,115 +73,19 @@ namespace WhereIsPerson
         {
 
         }
-    }
 
-    public static class DataBase //класс для работы с базой данных
-    {
-        static FbConnection dbConnect;
-        //метод подключения к базе данных
-        public static void OpenDBConnection()
-        // private void OpenDBConnection(string source, string db, string user, string pass)
+        private void MainForm_Activated(object sender, EventArgs e)
         {
-            try
+            if (DataBase.GetConnectionState())
             {
-                FbConnectionStringBuilder cs = new FbConnectionStringBuilder();
-
-                //cs.DataSource = source;
-                //cs.Database = db;
-                //cs.UserID = user;
-                //cs.Dialect = 3;
-
-                cs.DataSource = "localhost";
-                cs.Database = "C:\\codos\\WorkDB\\CODOS.GDB";
-                cs.UserID = "SYSDBA";
-                cs.Password = "masterkey";
-                cs.Dialect = 3;
-
-                string dbsource = cs.ToString();
-
-                dbConnect = new FbConnection(dbsource);
-                dbConnect.Open();
+                MessageLbl.ForeColor = Color.Green;
+                MessageLbl.Text = "Соединение с БД успешно установлено!";
             }
-            catch (Exception)
+            else
             {
-                dbConnect = null;
-                //тут надо что то придумать     
+                MessageLbl.ForeColor = Color.Red;
+                MessageLbl.Text = "Не удалось соединиться с указанной базой данных! Проверьте настройки подключения!";
             }
         }
-
-        // состояние подключения
-        public static bool GetConnectionState()
-        {
-            GlobalVariable.connection_on = false;
-
-            try
-            {
-                if (dbConnect.State == ConnectionState.Open)
-                {
-                    GlobalVariable.connection_on = true;
-                    return GlobalVariable.connection_on;
-                }
-            }
-            catch (Exception ex)
-            {
-                //Log(ex);
-            }
-
-            return GlobalVariable.connection_on;
-        }
-
-    }
-
-    public static class ConfigFile //класс работы с конфигурационным файлом
-    {
-        //метод считывания настроек с конфигурационного файла
-        public static void OpenConfigFile()
-        {
-            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
-            if (File.Exists(path))
-            {
-                string[] settings = File.ReadAllLines(path);
-
-                for (int i = 0; i < settings.Length; i++)
-                {
-                    settings[i] = settings[i].Substring(settings[i].IndexOf('=') + 1);
-                }
-                GlobalVariable.ip_addr = settings[0];
-                GlobalVariable.user = settings[1];
-                GlobalVariable.pass = settings[2];
-                GlobalVariable.pathDB = settings[3];
-            }
-        }
-
-        //метод сохранения настроек в конфигурационном файле
-        public static void SaveConfigFile()
-        {
-            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
-            //MessageBox.Show(path);
-
-            //массив настроек
-            string[] settings = new String[4];
-
-            settings[0] = "IPADDR=" + GlobalVariable.ip_addr;
-            settings[1] = "USER=" + GlobalVariable.user;
-            settings[2] = "PASS=" + GlobalVariable.pass;
-            settings[3] = "PATH=" + GlobalVariable.pathDB;
-
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-            File.AppendAllLines(path, settings);
-        }
-    }
-
-    public static class GlobalVariable //класс для хранения глобальных переменных
-    {
-        //static FbConnection dbConnect;
-        public static bool connection_on;
-        public static string ip_addr;
-        public static string user;
-        public static string pass;
-        public static string pathDB;
     }
 }
