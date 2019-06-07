@@ -32,6 +32,18 @@ namespace WhereIsPerson
             GlobalVariable.pathDB = pathToDBtxt.Text;
 
             ConfigFile.SaveConfigFile();
+            DataBase.OpenDBConnection(GlobalVariable.ip_addr, GlobalVariable.pathDB, GlobalVariable.user, GlobalVariable.pass);
+
+            //if (DataBase.GetConnectionState())
+            //{
+            //    MessageLbl.ForeColor = Color.Green;
+            //    MessageLbl.Text = "Соединение с БД успешно установлено!";
+            //}
+            //else
+            //{
+            //    MessageLbl.ForeColor = Color.Red;
+            //    MessageLbl.Text = "Не удалось соединиться с указанной базой данных! Проверьте настройки подключения!";
+            //}
 
             Close();
         }

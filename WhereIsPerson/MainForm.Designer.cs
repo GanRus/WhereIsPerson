@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ResultOfSearchList = new System.Windows.Forms.DataGridView();
+            this.ResultOfSearchDataGrid = new System.Windows.Forms.DataGridView();
             this.NameTxt = new System.Windows.Forms.TextBox();
             this.SurnameTxt = new System.Windows.Forms.TextBox();
             this.PatronymicTxt = new System.Windows.Forms.TextBox();
@@ -47,41 +47,47 @@
             this.OrgCmbBox = new System.Windows.Forms.ComboBox();
             this.ProfCmbBox = new System.Windows.Forms.ComboBox();
             this.MessageLbl = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.ResultOfSearchList)).BeginInit();
+            this.StateLbl = new System.Windows.Forms.Label();
+            this.EventsDataGrid = new System.Windows.Forms.DataGridView();
+            this.PhotoPicBox = new System.Windows.Forms.PictureBox();
+            this.DescriptionTxtBox = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.ResultOfSearchDataGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SearchGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.EventsDataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PhotoPicBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // ResultOfSearchList
+            // ResultOfSearchDataGrid
             // 
-            this.ResultOfSearchList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ResultOfSearchList.Location = new System.Drawing.Point(537, 228);
-            this.ResultOfSearchList.Name = "ResultOfSearchList";
-            this.ResultOfSearchList.Size = new System.Drawing.Size(426, 256);
-            this.ResultOfSearchList.TabIndex = 0;
+            this.ResultOfSearchDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ResultOfSearchDataGrid.Location = new System.Drawing.Point(16, 30);
+            this.ResultOfSearchDataGrid.Name = "ResultOfSearchDataGrid";
+            this.ResultOfSearchDataGrid.Size = new System.Drawing.Size(426, 230);
+            this.ResultOfSearchDataGrid.TabIndex = 0;
             // 
             // NameTxt
             // 
             this.NameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.NameTxt.Location = new System.Drawing.Point(126, 23);
+            this.NameTxt.Location = new System.Drawing.Point(160, 23);
             this.NameTxt.Name = "NameTxt";
-            this.NameTxt.Size = new System.Drawing.Size(200, 26);
+            this.NameTxt.Size = new System.Drawing.Size(250, 26);
             this.NameTxt.TabIndex = 1;
             // 
             // SurnameTxt
             // 
             this.SurnameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SurnameTxt.Location = new System.Drawing.Point(126, 60);
+            this.SurnameTxt.Location = new System.Drawing.Point(160, 60);
             this.SurnameTxt.Name = "SurnameTxt";
-            this.SurnameTxt.Size = new System.Drawing.Size(200, 26);
+            this.SurnameTxt.Size = new System.Drawing.Size(250, 26);
             this.SurnameTxt.TabIndex = 2;
             // 
             // PatronymicTxt
             // 
             this.PatronymicTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.PatronymicTxt.Location = new System.Drawing.Point(126, 97);
+            this.PatronymicTxt.Location = new System.Drawing.Point(160, 97);
             this.PatronymicTxt.Name = "PatronymicTxt";
-            this.PatronymicTxt.Size = new System.Drawing.Size(200, 26);
+            this.PatronymicTxt.Size = new System.Drawing.Size(250, 26);
             this.PatronymicTxt.TabIndex = 3;
             // 
             // NameLbl
@@ -116,11 +122,13 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Location = new System.Drawing.Point(-6, 3);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(975, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(61, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -136,14 +144,14 @@
             // SettingsToolStripMenuItem
             // 
             this.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem";
-            this.SettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.SettingsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.SettingsToolStripMenuItem.Text = "Настройки";
             this.SettingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // ExitToolStripMenuItem
             // 
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.ExitToolStripMenuItem.Text = "Выход";
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -161,9 +169,9 @@
             this.SearchGroupBox.Controls.Add(this.NameLbl);
             this.SearchGroupBox.Controls.Add(this.PatronymicLbl);
             this.SearchGroupBox.Controls.Add(this.SurnameLbl);
-            this.SearchGroupBox.Location = new System.Drawing.Point(12, 228);
+            this.SearchGroupBox.Location = new System.Drawing.Point(16, 268);
             this.SearchGroupBox.Name = "SearchGroupBox";
-            this.SearchGroupBox.Size = new System.Drawing.Size(349, 256);
+            this.SearchGroupBox.Size = new System.Drawing.Size(426, 256);
             this.SearchGroupBox.TabIndex = 8;
             this.SearchGroupBox.TabStop = false;
             this.SearchGroupBox.Text = "Параметры поиска";
@@ -214,45 +222,86 @@
             // 
             this.OrgCmbBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.OrgCmbBox.FormattingEnabled = true;
-            this.OrgCmbBox.Location = new System.Drawing.Point(126, 173);
+            this.OrgCmbBox.Location = new System.Drawing.Point(160, 173);
             this.OrgCmbBox.Name = "OrgCmbBox";
-            this.OrgCmbBox.Size = new System.Drawing.Size(200, 28);
+            this.OrgCmbBox.Size = new System.Drawing.Size(250, 28);
             this.OrgCmbBox.TabIndex = 8;
             // 
             // ProfCmbBox
             // 
             this.ProfCmbBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ProfCmbBox.FormattingEnabled = true;
-            this.ProfCmbBox.Location = new System.Drawing.Point(126, 134);
+            this.ProfCmbBox.Location = new System.Drawing.Point(160, 134);
             this.ProfCmbBox.Name = "ProfCmbBox";
-            this.ProfCmbBox.Size = new System.Drawing.Size(200, 28);
+            this.ProfCmbBox.Size = new System.Drawing.Size(250, 28);
             this.ProfCmbBox.TabIndex = 7;
             // 
             // MessageLbl
             // 
+            this.MessageLbl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.MessageLbl.AutoSize = true;
-            this.MessageLbl.Location = new System.Drawing.Point(374, 35);
+            this.MessageLbl.Location = new System.Drawing.Point(90, 530);
             this.MessageLbl.Name = "MessageLbl";
             this.MessageLbl.Size = new System.Drawing.Size(0, 13);
             this.MessageLbl.TabIndex = 9;
+            // 
+            // StateLbl
+            // 
+            this.StateLbl.AutoSize = true;
+            this.StateLbl.Location = new System.Drawing.Point(19, 530);
+            this.StateLbl.Name = "StateLbl";
+            this.StateLbl.Size = new System.Drawing.Size(64, 13);
+            this.StateLbl.TabIndex = 10;
+            this.StateLbl.Text = "Состояние:";
+            // 
+            // EventsDataGrid
+            // 
+            this.EventsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.EventsDataGrid.Location = new System.Drawing.Point(458, 276);
+            this.EventsDataGrid.Name = "EventsDataGrid";
+            this.EventsDataGrid.Size = new System.Drawing.Size(483, 244);
+            this.EventsDataGrid.TabIndex = 11;
+            // 
+            // PhotoPicBox
+            // 
+            this.PhotoPicBox.Location = new System.Drawing.Point(458, 30);
+            this.PhotoPicBox.Name = "PhotoPicBox";
+            this.PhotoPicBox.Size = new System.Drawing.Size(201, 230);
+            this.PhotoPicBox.TabIndex = 12;
+            this.PhotoPicBox.TabStop = false;
+            // 
+            // DescriptionTxtBox
+            // 
+            this.DescriptionTxtBox.Location = new System.Drawing.Point(675, 30);
+            this.DescriptionTxtBox.Multiline = true;
+            this.DescriptionTxtBox.Name = "DescriptionTxtBox";
+            this.DescriptionTxtBox.Size = new System.Drawing.Size(266, 230);
+            this.DescriptionTxtBox.TabIndex = 13;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 496);
+            this.ClientSize = new System.Drawing.Size(957, 547);
+            this.Controls.Add(this.DescriptionTxtBox);
+            this.Controls.Add(this.PhotoPicBox);
+            this.Controls.Add(this.EventsDataGrid);
+            this.Controls.Add(this.StateLbl);
             this.Controls.Add(this.MessageLbl);
             this.Controls.Add(this.SearchGroupBox);
-            this.Controls.Add(this.ResultOfSearchList);
+            this.Controls.Add(this.ResultOfSearchDataGrid);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "WhereIsPerson";
-            ((System.ComponentModel.ISupportInitialize)(this.ResultOfSearchList)).EndInit();
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
+            ((System.ComponentModel.ISupportInitialize)(this.ResultOfSearchDataGrid)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.SearchGroupBox.ResumeLayout(false);
             this.SearchGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.EventsDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PhotoPicBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -260,7 +309,7 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView ResultOfSearchList;
+        private System.Windows.Forms.DataGridView ResultOfSearchDataGrid;
         private System.Windows.Forms.TextBox NameTxt;
         private System.Windows.Forms.TextBox SurnameTxt;
         private System.Windows.Forms.TextBox PatronymicTxt;
@@ -279,6 +328,10 @@
         private System.Windows.Forms.ComboBox OrgCmbBox;
         private System.Windows.Forms.ComboBox ProfCmbBox;
         private System.Windows.Forms.Label MessageLbl;
+        private System.Windows.Forms.Label StateLbl;
+        private System.Windows.Forms.DataGridView EventsDataGrid;
+        private System.Windows.Forms.PictureBox PhotoPicBox;
+        private System.Windows.Forms.TextBox DescriptionTxtBox;
     }
 }
 
