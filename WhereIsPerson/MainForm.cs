@@ -1,13 +1,6 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WhereIsPerson
@@ -27,29 +20,27 @@ namespace WhereIsPerson
             //если соединение установлено
             if (DataBase.GetConnectionState())
             {
-                FbCommand profQuery = new FbCommand("SELECT NAME FROM PROFESSION ORDER BY NAME", DataBase.dbConnect);
+                //заполняем данными комбобоксы "Специальность" и "Организация"
 
-                MessageBox.Show("test");
+                FbCommand query = new FbCommand("SELECT NAME FROM PROFESSION ORDER BY NAME", DataBase.dbConnect);
+                FbDataReader reader = query.ExecuteReader();//для запросов, которые возвращают результат в виде набора данных надо использоваться метод ExecuteReader()
 
-                if (GlobalVariable.connection_on)
+                while (reader.Read())
                 {
-                    FbTransaction fbt = DataBase.dbConnect.BeginTransaction();
-                    //profQuery.Dispose();
-                    profQuery.Transaction = fbt;
-                    FbDataReader reader = profQuery.ExecuteReader();//для запросов, которые возвращают результат в виде набора данных надо использоваться метод ExecuteReader()
-
-                    //for (int i = 0; i < reader.GetString(0).Length; i++)
-                    //{
-                    //    ProfCmbBox.Items.Add()
-                    //}
-
-                    while (reader.Read())
-                    {
-                        ProfCmbBox.Items.Add(reader.GetString(0).ToString());
-                    }
-
-
+                    ProfCmbBox.Items.Add(reader.GetString(0).ToString());
                 }
+
+                query.Dispose(); //нужно ли?
+
+                query = new FbCommand("SELECT NAME FROM DEPARTMENT ORDER BY NAME", DataBase.dbConnect);
+                reader = query.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    OrgCmbBox.Items.Add(reader.GetString(0).ToString());
+                }
+
+                query.Dispose();
             }
         }
 
@@ -66,7 +57,53 @@ namespace WhereIsPerson
 
         private void SearchBtn_Click(object sender, EventArgs e)
         {
+            if (DataBase.GetConnectionState())
+            {
+                //если заполнен хотя бы один параметр поиска
+                if (NameTxt.Text != "" || SurnameTxt.Text != "" || PatronymicTxt.Text != "" || ProfCmbBox.Text != "" || OrgCmbBox.Text != "")
+                {
+                    string query, addToQuery="";
+                    bool firstCondition=true;
 
+                    if (NameTxt.Text != "")
+                    {
+                        addToQuery = "F_NAME=" + NameTxt.Text.Trim();
+                        firstCondition = false;
+                    }
+
+                    if (SurnameTxt.Text != "")
+                    {
+                        if (!firstCondition) { addToQuery += " AND ";}
+                        else { firstCondition = true; }
+
+                        addToQuery = "S_NAME=" + SurnameTxt.Text.Trim();
+                    }
+
+                    if (PatronymicTxt.Text != "")
+                    {
+                        if (!firstCondition) { addToQuery += " AND "; }
+                        else { firstCondition = true; }
+
+                        addToQuery = "M_NAME=" + PatronymicTxt.Text.Trim();
+                    }
+                    if (ProfCmbBox.Text != "")
+                    {
+                        if (!firstCondition) { addToQuery += " AND "; }
+                        else { firstCondition = true; }
+
+                        //addToQuery = "F_NAME=" + NameTxt.Text.Trim();
+                    }
+                    if (OrgCmbBox.Text != "")
+                    {
+                        if (!firstCondition) { addToQuery += " AND "; }
+                        else { firstCondition = true; }
+
+                        //addToQuery = "F_NAME=" + NameTxt.Text.Trim();
+                    }
+
+                    query = "SELECT F_NAME, S_NAME, M_NAME, DEPARTMENT_ID, PROFESSION_ID WHERE " + addToQuery;
+                }
+            }
         }
 
         private void ClearBtn_Click(object sender, EventArgs e)
@@ -87,5 +124,12 @@ namespace WhereIsPerson
                 MessageLbl.Text = "Не удалось соединиться с указанной базой данных! Проверьте настройки подключения!";
             }
         }
+
+        private void ProfCmbBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedProf = ProfCmbBox.SelectedItem.ToString();
+        }
+
+       
     }
 }
