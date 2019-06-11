@@ -20,8 +20,6 @@ namespace WhereIsPerson
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-
-
         }
     }
 
@@ -33,13 +31,14 @@ namespace WhereIsPerson
         public static string user;
         public static string pass;
         public static string pathDB;
+        public static string codepage;
     }
 
     public static class DataBase //класс для работы с базой данных
     {
         public static FbConnection dbConnect;
         //метод подключения к базе данных
-        public static void OpenDBConnection(string source, string db, string user, string pass)
+        public static void OpenDBConnection(string source, string db, string user, string pass, string codepage)
         {
             try
             {
@@ -50,6 +49,7 @@ namespace WhereIsPerson
                 cs.UserID = user;
                 cs.Password = pass;
                 cs.Dialect = 3;
+                cs.Charset = codepage;
 
                 string dbsource = cs.ToString();
 
@@ -90,23 +90,46 @@ namespace WhereIsPerson
     public static class ConfigFile //класс работы с конфигурационным файлом
     {
         //метод считывания настроек с конфигурационного файла
-        public static void OpenConfigFile()
+        public static bool OpenConfigFile()
         {
             string path = Directory.GetCurrentDirectory() + "\\config.cfg";
+
             if (File.Exists(path))
             {
-                string[] settings = File.ReadAllLines(path);
+                //string[] settings = File.ReadAllLines(path);
 
-                for (int i = 0; i < settings.Length; i++)
+                GlobalVariable.ip_addr = GetString(path, "IPADDR");
+                GlobalVariable.user = GetString(path, "USER");
+                GlobalVariable.pass = GetString(path, "PASS");
+                GlobalVariable.pathDB = GetString(path, "PATH");
+                GlobalVariable.codepage = GetString(path, "CODE");
+
+                if (GlobalVariable.ip_addr != "" && GlobalVariable.user != "" && GlobalVariable.pass != "" && GlobalVariable.pathDB != "" && GlobalVariable.codepage != "")
                 {
-                    settings[i] = settings[i].Substring(settings[i].IndexOf('=') + 1);
+                    return true;
                 }
-                GlobalVariable.ip_addr = settings[0];
-                GlobalVariable.user = settings[1];
-                GlobalVariable.pass = settings[2];
-                GlobalVariable.pathDB = settings[3];
             }
+
+            return false;
         }
+
+        private static string GetString(string fileName, string keyWord)
+        {
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.Contains(keyWord))
+                    {
+                        line = line.Substring(line.IndexOf('=') + 1);
+                        return line; //поиск до первого найденного совпадения
+                    }
+                }
+            }
+            return null; //если слово не нашли вернем null
+        }
+
 
         //метод сохранения настроек в конфигурационном файле
         public static void SaveConfigFile()
@@ -115,12 +138,13 @@ namespace WhereIsPerson
             //MessageBox.Show(path);
 
             //массив настроек
-            string[] settings = new String[4];
+            string[] settings = new String[5];
 
             settings[0] = "IPADDR=" + GlobalVariable.ip_addr;
             settings[1] = "USER=" + GlobalVariable.user;
             settings[2] = "PASS=" + GlobalVariable.pass;
             settings[3] = "PATH=" + GlobalVariable.pathDB;
+            settings[4] = "CODE=" + GlobalVariable.codepage;
 
             if (File.Exists(path))
             {

@@ -16,6 +16,7 @@ namespace WhereIsPerson
             userTxt.Text = GlobalVariable.user;
             passTxt.Text = GlobalVariable.pass;
             pathToDBtxt.Text = GlobalVariable.pathDB;
+            codeTxt.Text = GlobalVariable.codepage;
         }
 
         private void openFileDialogBtn_Click(object sender, EventArgs e)
@@ -30,9 +31,10 @@ namespace WhereIsPerson
             GlobalVariable.user = userTxt.Text;
             GlobalVariable.pass = passTxt.Text;
             GlobalVariable.pathDB = pathToDBtxt.Text;
+            GlobalVariable.codepage = codeTxt.Text;
 
             ConfigFile.SaveConfigFile();
-            DataBase.OpenDBConnection(GlobalVariable.ip_addr, GlobalVariable.pathDB, GlobalVariable.user, GlobalVariable.pass);
+            DataBase.OpenDBConnection(GlobalVariable.ip_addr, GlobalVariable.pathDB, GlobalVariable.user, GlobalVariable.pass, GlobalVariable.codepage);
 
             //if (DataBase.GetConnectionState())
             //{

@@ -40,8 +40,10 @@ namespace WhereIsPerson
             this.userTxt = new System.Windows.Forms.TextBox();
             this.passTxt = new System.Windows.Forms.TextBox();
             this.ipLbl = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.loginLbl = new System.Windows.Forms.Label();
+            this.passLbl = new System.Windows.Forms.Label();
+            this.codeTxt = new System.Windows.Forms.TextBox();
+            this.codeLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDBDialog
@@ -103,14 +105,14 @@ namespace WhereIsPerson
             // 
             // userTxt
             // 
-            this.userTxt.Location = new System.Drawing.Point(144, 30);
+            this.userTxt.Location = new System.Drawing.Point(137, 30);
             this.userTxt.Name = "userTxt";
             this.userTxt.Size = new System.Drawing.Size(116, 20);
             this.userTxt.TabIndex = 6;
             // 
             // passTxt
             // 
-            this.passTxt.Location = new System.Drawing.Point(275, 30);
+            this.passTxt.Location = new System.Drawing.Point(260, 30);
             this.passTxt.Name = "passTxt";
             this.passTxt.Size = new System.Drawing.Size(116, 20);
             this.passTxt.TabIndex = 7;
@@ -124,31 +126,49 @@ namespace WhereIsPerson
             this.ipLbl.TabIndex = 8;
             this.ipLbl.Text = "IP адрес сервера";
             // 
-            // label2
+            // loginLbl
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(145, 14);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(103, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Имя пользователя";
+            this.loginLbl.AutoSize = true;
+            this.loginLbl.Location = new System.Drawing.Point(140, 14);
+            this.loginLbl.Name = "loginLbl";
+            this.loginLbl.Size = new System.Drawing.Size(103, 13);
+            this.loginLbl.TabIndex = 9;
+            this.loginLbl.Text = "Имя пользователя";
             // 
-            // label3
+            // passLbl
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(278, 14);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Пароль";
+            this.passLbl.AutoSize = true;
+            this.passLbl.Location = new System.Drawing.Point(263, 14);
+            this.passLbl.Name = "passLbl";
+            this.passLbl.Size = new System.Drawing.Size(45, 13);
+            this.passLbl.TabIndex = 10;
+            this.passLbl.Text = "Пароль";
+            // 
+            // codeTxt
+            // 
+            this.codeTxt.Location = new System.Drawing.Point(383, 30);
+            this.codeTxt.Name = "codeTxt";
+            this.codeTxt.Size = new System.Drawing.Size(116, 20);
+            this.codeTxt.TabIndex = 11;
+            // 
+            // codeLbl
+            // 
+            this.codeLbl.AutoSize = true;
+            this.codeLbl.Location = new System.Drawing.Point(386, 14);
+            this.codeLbl.Name = "codeLbl";
+            this.codeLbl.Size = new System.Drawing.Size(62, 13);
+            this.codeLbl.TabIndex = 12;
+            this.codeLbl.Text = "Кодировка";
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(539, 147);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.codeLbl);
+            this.Controls.Add(this.codeTxt);
+            this.Controls.Add(this.passLbl);
+            this.Controls.Add(this.loginLbl);
             this.Controls.Add(this.ipLbl);
             this.Controls.Add(this.passTxt);
             this.Controls.Add(this.userTxt);
@@ -177,7 +197,9 @@ namespace WhereIsPerson
         private TextBox userTxt;
         private TextBox passTxt;
         private Label ipLbl;
-        private Label label2;
-        private Label label3;
+        private Label loginLbl;
+        private Label passLbl;
+        private TextBox codeTxt;
+        private Label codeLbl;
     }
 }
