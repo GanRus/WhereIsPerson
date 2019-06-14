@@ -12,43 +12,18 @@ namespace WhereIsPerson
         public MainForm()
         {
             InitializeComponent();
-
-            //соединяем с базой данных
-            if (ConfigFile.OpenConfigFile())
-            {
-                DataBase.OpenDBConnection(GlobalVariable.ip_addr, GlobalVariable.pathDB, GlobalVariable.user, GlobalVariable.pass, GlobalVariable.codepage);
-            }
-            else
-            {
-                MessageLbl.ForeColor = Color.Red;
-                MessageLbl.Text = "Ошибка подключения к БД! Не указаны все нужные данные для подключения!";
-            }
+            new Presenter(this);
+        }
+        public event EventHandler loadMainForm = null; // событие нажатия кнопки с цифрой
 
             //если соединение установлено
-            if (DataBase.GetConnectionState())
+            if (GetConnectionState())
             {
                 //заполняем данными комбобоксы "Специальность" и "Организация"
 
-                //using (DataBase.dbConnect)
-                //{
-                FbCommand query = new FbCommand("SELECT NAME FROM PROFESSION ORDER BY NAME", DataBase.dbConnect);
-                FbDataReader reader = query.ExecuteReader();//для запросов, которые возвращают результат в виде набора данных надо использоваться метод ExecuteReader()
-
-                while (reader.Read())
-                {
-                    ProfCmbBox.Items.Add(reader.GetString(0).ToString());
-                }
-
-                query = new FbCommand("SELECT NAME FROM DEPARTMENT ORDER BY NAME", DataBase.dbConnect);
-                reader = query.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    OrgCmbBox.Items.Add(reader.GetString(0).ToString());
-                }
-                //}
+                
             }
-        }
+        
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -58,21 +33,18 @@ namespace WhereIsPerson
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void SearchBtn_Click(object sender, EventArgs e)
         {
-            if (DataBase.GetConnectionState())
+            if (GetConnectionState())
             {
                 //если заполнен хотя бы один параметр поиска
                 if (NameTxt.Text != "" || SurnameTxt.Text != "" || PatronymicTxt.Text != "" || ProfCmbBox.Text != "" || OrgCmbBox.Text != "")
                 {
                     string queryString, addToQuery = "";
                     bool firstCondition = true;
-
-                    //ListWorkersDataGrid.Rows.Clear();
-                    //ListWorkersDataGrid.Columns.Clear();
 
                     if (SurnameTxt.Text != "")
                     {
@@ -99,46 +71,24 @@ namespace WhereIsPerson
                     {
                         if (!firstCondition) { addToQuery += " AND "; }
                         else { firstCondition = false; }
-
-                        //addToQuery = "F_NAME=" + NameTxt.Text.Trim();
                     }
                     if (OrgCmbBox.Text != "")
                     {
                         if (!firstCondition) { addToQuery += " AND "; }
-                        //addToQuery = "F_NAME=" + NameTxt.Text.Trim();
                     }
 
                     queryString = "SELECT F_NAME, S_NAME, M_NAME, PROFESSION_ID, DEPARTMENT_ID FROM PERSONNEL WHERE " + addToQuery;
 
-                    var column1 = new DataGridViewColumn();
-                    column1.HeaderText = "Фамилия";
-                    column1.Width = 100;
-                    column1.ReadOnly = true;
-                    column1.Name = "surname";
-                    column1.CellTemplate = new DataGridViewTextBoxCell();
-
-                    var column2 = new DataGridViewColumn();
-                    column2.HeaderText = "Имя";
-                    column2.Width = 100;
-                    column2.ReadOnly = true;
-                    column2.Name = "name";
-                    column2.CellTemplate = new DataGridViewTextBoxCell();
-
-                    //ListWorkersDataGrid.Columns.Add(column1);
-                    //ListWorkersDataGrid.Columns.Add(column2);
-
                     ListWorkersDataGrid.AllowUserToAddRows = false; //запрешаем пользователю самому добавлять строки
 
-                    //using (DataBase.dbConnect)
-                    //{
-                    FbCommand query = new FbCommand(queryString, DataBase.dbConnect);
-                    FbDataAdapter da = new FbDataAdapter(queryString, DataBase.dbConnect);
+                    using (FbDataAdapter da = new FbDataAdapter(queryString, dbConnect))
+                    {
+                        DataTable resultTable = new DataTable();
 
-                    DataTable resultTable = new DataTable();
+                        da.Fill(resultTable);
 
-                    da.Fill(resultTable);
-
-                    ListWorkersDataGrid.DataSource = resultTable;
+                        ListWorkersDataGrid.DataSource = resultTable;
+                    }
 
                     ListWorkersDataGrid.Columns[0].HeaderText = "Фамилия";
                     ListWorkersDataGrid.Columns[1].HeaderText = "Имя";
@@ -160,7 +110,7 @@ namespace WhereIsPerson
 
         private void MainForm_Activated(object sender, EventArgs e)
         {
-            if (DataBase.GetConnectionState())
+            if (GetConnectionState())
             {
                 MessageLbl.ForeColor = Color.Green;
                 MessageLbl.Text = "Соединение с БД успешно установлено!";
@@ -177,6 +127,9 @@ namespace WhereIsPerson
             string selectedProf = ProfCmbBox.SelectedItem.ToString();
         }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }
