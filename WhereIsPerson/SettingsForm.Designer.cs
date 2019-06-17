@@ -180,6 +180,7 @@ namespace WhereIsPerson
             this.Controls.Add(this.pathToDBtxt);
             this.Name = "SettingsForm";
             this.Text = "Настройки";
+            this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -188,18 +189,18 @@ namespace WhereIsPerson
         #endregion
 
         private OpenFileDialog openFileDBDialog;
-        private TextBox pathToDBtxt;
+        public TextBox pathToDBtxt;
         private Label pathToDBlbl;
         private Button openFileDialogBtn;
         private Button okBtn;
         private Button cancelBtn;
-        private TextBox ipTxt;
-        private TextBox userTxt;
-        private TextBox passTxt;
+        public TextBox ipTxt;
+        public TextBox userTxt;
+        public TextBox passTxt;
         private Label ipLbl;
         private Label loginLbl;
         private Label passLbl;
-        private TextBox codeTxt;
+        public TextBox codeTxt;
         private Label codeLbl;
     }
 }

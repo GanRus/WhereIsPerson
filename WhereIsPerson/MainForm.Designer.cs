@@ -60,9 +60,15 @@
             // 
             // ListWorkersDataGrid
             // 
+            this.ListWorkersDataGrid.AllowUserToAddRows = false;
+            this.ListWorkersDataGrid.AllowUserToDeleteRows = false;
+            this.ListWorkersDataGrid.AllowUserToOrderColumns = true;
+            this.ListWorkersDataGrid.AllowUserToResizeColumns = false;
+            this.ListWorkersDataGrid.AllowUserToResizeRows = false;
             this.ListWorkersDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ListWorkersDataGrid.Location = new System.Drawing.Point(16, 30);
             this.ListWorkersDataGrid.Name = "ListWorkersDataGrid";
+            this.ListWorkersDataGrid.RowHeadersVisible = false;
             this.ListWorkersDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ListWorkersDataGrid.Size = new System.Drawing.Size(426, 230);
             this.ListWorkersDataGrid.TabIndex = 0;
@@ -233,6 +239,7 @@
             // 
             // ProfCmbBox
             // 
+            this.ProfCmbBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.ProfCmbBox.DropDownHeight = 300;
             this.ProfCmbBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ProfCmbBox.FormattingEnabled = true;
@@ -287,6 +294,7 @@
             // 
             // MainForm
             // 
+            this.AcceptButton = this.SearchBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(957, 547);
@@ -317,13 +325,13 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView ListWorkersDataGrid;
-        private System.Windows.Forms.TextBox SurnameTxt;
-        private System.Windows.Forms.TextBox NameTxt;
-        private System.Windows.Forms.TextBox PatronymicTxt;
-        private System.Windows.Forms.Label NameLbl;
-        private System.Windows.Forms.Label SurnameLbl;
-        private System.Windows.Forms.Label PatronymicLbl;
+        public System.Windows.Forms.DataGridView ListWorkersDataGrid;
+        public System.Windows.Forms.TextBox SurnameTxt;
+        public System.Windows.Forms.TextBox NameTxt;
+        public System.Windows.Forms.TextBox PatronymicTxt;
+        public System.Windows.Forms.Label NameLbl;
+        public System.Windows.Forms.Label SurnameLbl;
+        public System.Windows.Forms.Label PatronymicLbl;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem MenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SettingsToolStripMenuItem;
@@ -333,12 +341,12 @@
         private System.Windows.Forms.Button SearchBtn;
         private System.Windows.Forms.Label OrgranisationLbl;
         private System.Windows.Forms.Label ProfessionLbl;
-        private System.Windows.Forms.ComboBox OrgCmbBox;
-        private System.Windows.Forms.ComboBox ProfCmbBox;
-        private System.Windows.Forms.Label MessageLbl;
+        public System.Windows.Forms.ComboBox OrgCmbBox;
+        public System.Windows.Forms.ComboBox ProfCmbBox;
+        public System.Windows.Forms.Label MessageLbl;
         private System.Windows.Forms.Label StateLbl;
-        private System.Windows.Forms.DataGridView EventsDataGrid;
-        private System.Windows.Forms.PictureBox PhotoPicBox;
+        public System.Windows.Forms.DataGridView EventsDataGrid;
+        public System.Windows.Forms.PictureBox PhotoPicBox;
         private System.Windows.Forms.TextBox DescriptionTxtBox;
     }
 }

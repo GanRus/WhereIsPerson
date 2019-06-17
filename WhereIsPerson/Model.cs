@@ -14,9 +14,9 @@ namespace WhereIsPerson
         public string pass;
         public string pathDB;
         public string codepage;
+        public FbConnection dbConnect;
 
         #region Соединение с базой данных
-        public FbConnection dbConnect;
         //метод подключения к базе данных
         public void OpenDBConnection(string source, string db, string user, string pass, string codepage)
         {
@@ -33,13 +33,17 @@ namespace WhereIsPerson
 
                 string dbsource = cs.ToString();
 
+                if (GetConnectionState()) //если уже было подключение, закрываем его
+                {
+                    dbConnect.Close();
+                }
+
                 dbConnect = new FbConnection(dbsource);
                 dbConnect.Open();
             }
             catch (Exception ex)
             {
                 dbConnect = null;
-                //MessageBox.Show(ex.Message + " " + ip_addr + " " + pathDB + " " + user + " " + pass);
                 //тут надо что то придумать     
             }
         }
@@ -66,28 +70,8 @@ namespace WhereIsPerson
         }
         #endregion
 
-        //FbCommand query = new FbCommand("SELECT NAME FROM PROFESSION ORDER BY NAME", dbConnect);
-        //FbDataReader reader;
-
-        //        using (reader = query.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                ProfCmbBox.Items.Add(reader.GetString(0).ToString());
-        //            }
-        //        }
-
-        //        query = new FbCommand("SELECT NAME FROM DEPARTMENT ORDER BY NAME", dbConnect);
-
-        //        using (reader = query.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                OrgCmbBox.Items.Add(reader.GetString(0).ToString());
-        //            }
-        //        }
-
         #region Работа с конфигурационным файлом
+        
         //метод считывания настроек с конфигурационного файла
         public bool OpenConfigFile()
         {
@@ -151,6 +135,22 @@ namespace WhereIsPerson
             }
             File.AppendAllLines(path, settings);
         }
+        #endregion
+
+        #region Работа с базой данных
+
+        public DataTable GetData(string query)
+        {
+            using (FbDataAdapter da = new FbDataAdapter(query, dbConnect))
+            {
+                DataTable resultTable = new DataTable();
+
+                da.Fill(resultTable);
+
+                return resultTable;
+            }
+        }
+
         #endregion
     }
 }

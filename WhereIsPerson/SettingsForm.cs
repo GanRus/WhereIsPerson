@@ -9,15 +9,12 @@ namespace WhereIsPerson
         public SettingsForm()
         {
             InitializeComponent();
-
-            ConfigFile.OpenConfigFile();
-
-            ipTxt.Text = GlobalVariable.ip_addr;
-            userTxt.Text = GlobalVariable.user;
-            passTxt.Text = GlobalVariable.pass;
-            pathToDBtxt.Text = GlobalVariable.pathDB;
-            codeTxt.Text = GlobalVariable.codepage;
+            new SettingsPresenter(this);
+            
         }
+
+        public event EventHandler loadSettingsForm = null; // событие загрузки формы настроек
+        public event EventHandler pressOKBtn = null; // нажатие кнопки ОК
 
         private void openFileDialogBtn_Click(object sender, EventArgs e)
         {
@@ -27,25 +24,7 @@ namespace WhereIsPerson
 
         private void okBtn_Click(object sender, EventArgs e)
         {
-            GlobalVariable.ip_addr = ipTxt.Text;
-            GlobalVariable.user = userTxt.Text;
-            GlobalVariable.pass = passTxt.Text;
-            GlobalVariable.pathDB = pathToDBtxt.Text;
-            GlobalVariable.codepage = codeTxt.Text;
-
-            ConfigFile.SaveConfigFile();
-            DataBase.OpenDBConnection(GlobalVariable.ip_addr, GlobalVariable.pathDB, GlobalVariable.user, GlobalVariable.pass, GlobalVariable.codepage);
-
-            //if (DataBase.GetConnectionState())
-            //{
-            //    MessageLbl.ForeColor = Color.Green;
-            //    MessageLbl.Text = "Соединение с БД успешно установлено!";
-            //}
-            //else
-            //{
-            //    MessageLbl.ForeColor = Color.Red;
-            //    MessageLbl.Text = "Не удалось соединиться с указанной базой данных! Проверьте настройки подключения!";
-            //}
+            pressOKBtn.Invoke(sender, e);
 
             Close();
         }
@@ -55,5 +34,9 @@ namespace WhereIsPerson
             Close();
         }
 
+        private void SettingsForm_Load(object sender, EventArgs e)
+        {
+            loadSettingsForm.Invoke(sender, e);
+        }
     }
 }
