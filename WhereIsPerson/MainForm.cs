@@ -16,6 +16,7 @@ namespace WhereIsPerson
         public event EventHandler loadMainForm = null; // событие загрузки главной формы
         public event EventHandler activeMainForm = null; //событие активации формы
         public event EventHandler pressSearchBtn = null; //нажатие кнопки поиска
+        public event EventHandler selectListWorkersRow = null; //выбор работника в списке найденных
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -55,6 +56,19 @@ namespace WhereIsPerson
         private void MainForm_Load(object sender, EventArgs e)
         {
             loadMainForm.Invoke(sender, e);
+        }
+
+        private void ListWorkersDataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            selectListWorkersRow.Invoke(sender, e);
+        }
+
+        private void ListWorkersDataGrid_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (Char)Keys.Enter)
+            {
+                selectListWorkersRow.Invoke(sender, e);
+            }
         }
     }
 }

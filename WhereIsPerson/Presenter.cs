@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Data;
+using System.Drawing;
 
 namespace WhereIsPerson
 {
@@ -15,6 +15,43 @@ namespace WhereIsPerson
             this.mainForm.loadMainForm += MainForm_loadMainForm;
             this.mainForm.activeMainForm += MainForm_activeMainForm;
             this.mainForm.pressSearchBtn += MainForm_pressSearchBtn;
+            this.mainForm.selectListWorkersRow += MainForm_selectListWorkersRow;
+        }
+
+        private void MainForm_selectListWorkersRow(object sender, System.EventArgs e)
+        {
+            //string id_worker = mainForm.ListWorkersDataGrid[0, mainForm.ListWorkersDataGrid.CurrentRow.Index].Value.ToString();
+
+
+            if (model.GetConnectionState())
+            {
+                string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString();
+                string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '01.06.2019' AND CLI_N = " + id_worker + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
+
+                DataTable resultTable = model.GetData(logtabQuery);
+
+                if (resultTable.Rows.Count > 0) //причесываем данные
+                {
+                    for (int i = 0; i < resultTable.Rows.Count; i++)
+                    {
+                        string tempStr = resultTable.Rows[i].Field<string>(2);
+                        tempStr = tempStr.Substring(0, tempStr.IndexOf(" ")); //обрезаем строку "Событие" удаляя ненужные слова после пробела
+                        resultTable.Rows[i].SetField(2, tempStr);
+                    }
+
+                }
+                mainForm.EventsDataGrid.DataSource = resultTable;
+
+                mainForm.EventsDataGrid.Columns[0].HeaderText = "Дата / время";
+                mainForm.EventsDataGrid.Columns[1].HeaderText = "Сотрудник";
+                mainForm.EventsDataGrid.Columns[2].HeaderText = "Событие";
+                mainForm.EventsDataGrid.Columns[3].HeaderText = "Пост";
+
+                mainForm.EventsDataGrid.Columns[0].Width = 100;
+                mainForm.EventsDataGrid.Columns[1].Width = 210;
+                mainForm.EventsDataGrid.Columns[2].Width = 70;
+                mainForm.EventsDataGrid.Columns[3].Width = 70;
+            }
         }
 
         private void MainForm_pressSearchBtn(object sender, System.EventArgs e)
@@ -22,7 +59,8 @@ namespace WhereIsPerson
             if (model.GetConnectionState())
             {
                 //если заполнен хотя бы один параметр поиска
-                if (mainForm.NameTxt.Text != "" || mainForm.SurnameTxt.Text != "" || mainForm.PatronymicTxt.Text != "" || mainForm.ProfCmbBox.Text != "" || mainForm.OrgCmbBox.Text != "")
+                if (mainForm.NameTxt.Text != "" || mainForm.SurnameTxt.Text != "" || mainForm.PatronymicTxt.Text != "" ||
+                    (mainForm.ProfCmbBox.Text != "" && mainForm.ProfCmbBox.SelectedValue != null) || (mainForm.OrgCmbBox.Text != "" && mainForm.OrgCmbBox.SelectedValue != null))
                 {
                     string queryString, addToQuery = "";
                     bool firstCondition = true;
@@ -48,32 +86,40 @@ namespace WhereIsPerson
 
                         addToQuery += "M_NAME = '" + mainForm.PatronymicTxt.Text.Trim() + "' ";
                     }
-                    if (mainForm.ProfCmbBox.Text != "")
+                    if (mainForm.ProfCmbBox.Text != "" && mainForm.ProfCmbBox.SelectedValue != null)
                     {
                         if (!firstCondition) { addToQuery += " AND "; }
                         else { firstCondition = false; }
 
                         addToQuery += "PROFESSION_ID = " + mainForm.ProfCmbBox.SelectedValue + " ";
                     }
-                    if (mainForm.OrgCmbBox.Text != "")
+                    if (mainForm.OrgCmbBox.Text != "" && mainForm.OrgCmbBox.SelectedValue != null)
                     {
                         if (!firstCondition) { addToQuery += " AND "; }
+
                         addToQuery += "DEPARTMENT_ID = " + mainForm.OrgCmbBox.SelectedValue;
                     }
 
-                    queryString = "SELECT F_NAME, S_NAME, M_NAME, PROFESSION_ID, DEPARTMENT_ID FROM PERSONNEL WHERE " + addToQuery;
+                    string profSubQuery = "(SELECT NAME FROM PROFESSION WHERE PROFESSION_ID = PERSONNEL.PROFESSION_ID) AS PROFESSION";
+                    //string dprtSubQuery = "(SELECT NAME FROM DEPARTMENT WHERE CODE = PERSONNEL.DEPARTMENT_ID) AS DEPARTMENT";
 
-                    MessageBox.Show(queryString);
-
-                    mainForm.ListWorkersDataGrid.AllowUserToAddRows = false; //запрешаем пользователю самому добавлять строки
+                    //queryString = "SELECT F_NAME, S_NAME, M_NAME, " + profSubQuery + ", " + dprtSubQuery + "  FROM PERSONNEL WHERE " + addToQuery;
+                    queryString = "SELECT CLI_N, F_NAME, S_NAME, M_NAME, " + profSubQuery + "  FROM PERSONNEL WHERE " + addToQuery + " ORDER BY F_NAME";
 
                     mainForm.ListWorkersDataGrid.DataSource = model.GetData(queryString); //запрашиваем данные из базы данных
 
-                    mainForm.ListWorkersDataGrid.Columns[0].HeaderText = "Фамилия";
-                    mainForm.ListWorkersDataGrid.Columns[1].HeaderText = "Имя";
-                    mainForm.ListWorkersDataGrid.Columns[2].HeaderText = "Отчество";
-                    mainForm.ListWorkersDataGrid.Columns[3].HeaderText = "Профессия";
-                    mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Организация";
+                    mainForm.ListWorkersDataGrid.Columns[0].Visible = false; //скрываем колонку с данными по номерам пропусков
+                    mainForm.ListWorkersDataGrid.Columns[1].HeaderText = "Фамилия";
+                    mainForm.ListWorkersDataGrid.Columns[2].HeaderText = "Имя";
+                    mainForm.ListWorkersDataGrid.Columns[3].HeaderText = "Отчество";
+                    mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Профессия";
+                    //mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Организация";
+
+                    mainForm.ListWorkersDataGrid.Columns[1].Width = 80;
+                    mainForm.ListWorkersDataGrid.Columns[2].Width = 80;
+                    mainForm.ListWorkersDataGrid.Columns[3].Width = 90;
+                    mainForm.ListWorkersDataGrid.Columns[4].Width = 156;
+                    //mainForm.ListWorkersDataGrid.AutoResizeColumn(3);
                 }
             }
         }
@@ -122,27 +168,6 @@ namespace WhereIsPerson
                 mainForm.MessageLbl.ForeColor = Color.Red;
                 mainForm.MessageLbl.Text = "Не удалось найти настройки подключения к БД";
             }
-
-            //FbCommand query = new FbCommand("SELECT NAME FROM PROFESSION ORDER BY NAME", dbConnect);
-            //FbDataReader reader;
-
-            //        using (reader = query.ExecuteReader())
-            //        {
-            //            while (reader.Read())
-            //            {
-            //                ProfCmbBox.Items.Add(reader.GetString(0).ToString());
-            //            }
-            //        }
-
-            //        query = new FbCommand("SELECT NAME FROM DEPARTMENT ORDER BY NAME", dbConnect);
-
-            //        using (reader = query.ExecuteReader())
-            //        {
-            //            while (reader.Read())
-            //            {
-            //                OrgCmbBox.Items.Add(reader.GetString(0).ToString());
-            //            }
-            //        }
 
             mainForm.ProfCmbBox.DataSource = model.GetData("SELECT PROFESSION_ID, NAME FROM PROFESSION ORDER BY NAME");
             mainForm.ProfCmbBox.DisplayMember = "Name";

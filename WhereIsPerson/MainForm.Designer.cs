@@ -62,16 +62,19 @@
             // 
             this.ListWorkersDataGrid.AllowUserToAddRows = false;
             this.ListWorkersDataGrid.AllowUserToDeleteRows = false;
-            this.ListWorkersDataGrid.AllowUserToOrderColumns = true;
             this.ListWorkersDataGrid.AllowUserToResizeColumns = false;
             this.ListWorkersDataGrid.AllowUserToResizeRows = false;
             this.ListWorkersDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ListWorkersDataGrid.Location = new System.Drawing.Point(16, 30);
+            this.ListWorkersDataGrid.MultiSelect = false;
             this.ListWorkersDataGrid.Name = "ListWorkersDataGrid";
+            this.ListWorkersDataGrid.ReadOnly = true;
             this.ListWorkersDataGrid.RowHeadersVisible = false;
             this.ListWorkersDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ListWorkersDataGrid.Size = new System.Drawing.Size(426, 230);
             this.ListWorkersDataGrid.TabIndex = 0;
+            this.ListWorkersDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListWorkersDataGrid_CellClick);
+            this.ListWorkersDataGrid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListWorkersDataGrid_KeyPress);
             // 
             // SurnameTxt
             // 
@@ -270,9 +273,15 @@
             // 
             // EventsDataGrid
             // 
+            this.EventsDataGrid.AllowUserToAddRows = false;
+            this.EventsDataGrid.AllowUserToDeleteRows = false;
+            this.EventsDataGrid.AllowUserToResizeColumns = false;
+            this.EventsDataGrid.AllowUserToResizeRows = false;
             this.EventsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.EventsDataGrid.Location = new System.Drawing.Point(458, 276);
             this.EventsDataGrid.Name = "EventsDataGrid";
+            this.EventsDataGrid.RowHeadersVisible = false;
+            this.EventsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.EventsDataGrid.Size = new System.Drawing.Size(483, 244);
             this.EventsDataGrid.TabIndex = 11;
             // 
