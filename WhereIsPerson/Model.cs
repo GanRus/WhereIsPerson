@@ -1,13 +1,15 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Data;
+using System.Drawing;
 using System.IO;
 
 namespace WhereIsPerson
 {
     class Model
     {
-        //static FbConnection dbConnect;
+        #region Соединение с базой данных
+
         public bool connection_on;
         public string ip_addr;
         public string user;
@@ -16,7 +18,6 @@ namespace WhereIsPerson
         public string codepage;
         public FbConnection dbConnect;
 
-        #region Соединение с базой данных
         //метод подключения к базе данных
         public void OpenDBConnection(string source, string db, string user, string pass, string codepage)
         {
@@ -71,7 +72,7 @@ namespace WhereIsPerson
         #endregion
 
         #region Работа с конфигурационным файлом
-        
+
         //метод считывания настроек с конфигурационного файла
         public bool OpenConfigFile()
         {
@@ -149,6 +150,52 @@ namespace WhereIsPerson
 
                 return resultTable;
             }
+        }
+
+        //обрезает строку в DataTable в указанном столбце по указанному делителю
+        public DataTable CutData(DataTable source, int numColumn, string delimeter)
+        {
+            string tempStr;
+
+            for (int i = 0; i < source.Rows.Count; i++)
+            {
+                tempStr = source.Rows[i].Field<string>(numColumn);
+                tempStr = tempStr.Substring(0, tempStr.IndexOf(delimeter));
+                source.Rows[i].SetField(numColumn, tempStr);
+            }
+
+            return source;
+        }
+
+        public bool GetPhoto(string query, string id, string namecolumn)
+        {
+            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
+
+            using (FbDataAdapter da = new FbDataAdapter(query, dbConnect))
+            {
+                FbCommand command = new FbCommand(query, dbConnect);
+                FbDataReader rdr = command.ExecuteReader();
+
+                if (rdr.Read())
+                {
+                    using (MemoryStream ms = new MemoryStream((byte[])rdr[namecolumn]))
+                    {
+                        File.WriteAllBytes("c:\\temp\\" + id + ".jpg", (byte[])rdr[namecolumn]);
+                    }
+                    
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public Image OpenPhoto(string id)
+        {
+            FileStream fs = new System.IO.FileStream(@"c:\\temp\\" + id + ".jpg", FileMode.Open, FileAccess.Read);
+            Image img = Image.FromStream(fs);
+            fs.Close();
+            return img;
         }
 
         #endregion

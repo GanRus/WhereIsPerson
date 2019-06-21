@@ -18,42 +18,6 @@ namespace WhereIsPerson
             this.mainForm.selectListWorkersRow += MainForm_selectListWorkersRow;
         }
 
-        private void MainForm_selectListWorkersRow(object sender, System.EventArgs e)
-        {
-            //string id_worker = mainForm.ListWorkersDataGrid[0, mainForm.ListWorkersDataGrid.CurrentRow.Index].Value.ToString();
-
-
-            if (model.GetConnectionState())
-            {
-                string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString();
-                string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '01.06.2019' AND CLI_N = " + id_worker + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
-
-                DataTable resultTable = model.GetData(logtabQuery);
-
-                if (resultTable.Rows.Count > 0) //причесываем данные
-                {
-                    for (int i = 0; i < resultTable.Rows.Count; i++)
-                    {
-                        string tempStr = resultTable.Rows[i].Field<string>(2);
-                        tempStr = tempStr.Substring(0, tempStr.IndexOf(" ")); //обрезаем строку "Событие" удаляя ненужные слова после пробела
-                        resultTable.Rows[i].SetField(2, tempStr);
-                    }
-
-                }
-                mainForm.EventsDataGrid.DataSource = resultTable;
-
-                mainForm.EventsDataGrid.Columns[0].HeaderText = "Дата / время";
-                mainForm.EventsDataGrid.Columns[1].HeaderText = "Сотрудник";
-                mainForm.EventsDataGrid.Columns[2].HeaderText = "Событие";
-                mainForm.EventsDataGrid.Columns[3].HeaderText = "Пост";
-
-                mainForm.EventsDataGrid.Columns[0].Width = 100;
-                mainForm.EventsDataGrid.Columns[1].Width = 210;
-                mainForm.EventsDataGrid.Columns[2].Width = 70;
-                mainForm.EventsDataGrid.Columns[3].Width = 70;
-            }
-        }
-
         private void MainForm_pressSearchBtn(object sender, System.EventArgs e)
         {
             if (model.GetConnectionState())
@@ -101,9 +65,7 @@ namespace WhereIsPerson
                     }
 
                     string profSubQuery = "(SELECT NAME FROM PROFESSION WHERE PROFESSION_ID = PERSONNEL.PROFESSION_ID) AS PROFESSION";
-                    //string dprtSubQuery = "(SELECT NAME FROM DEPARTMENT WHERE CODE = PERSONNEL.DEPARTMENT_ID) AS DEPARTMENT";
 
-                    //queryString = "SELECT F_NAME, S_NAME, M_NAME, " + profSubQuery + ", " + dprtSubQuery + "  FROM PERSONNEL WHERE " + addToQuery;
                     queryString = "SELECT CLI_N, F_NAME, S_NAME, M_NAME, " + profSubQuery + "  FROM PERSONNEL WHERE " + addToQuery + " ORDER BY F_NAME";
 
                     mainForm.ListWorkersDataGrid.DataSource = model.GetData(queryString); //запрашиваем данные из базы данных
@@ -113,13 +75,11 @@ namespace WhereIsPerson
                     mainForm.ListWorkersDataGrid.Columns[2].HeaderText = "Имя";
                     mainForm.ListWorkersDataGrid.Columns[3].HeaderText = "Отчество";
                     mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Профессия";
-                    //mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Организация";
 
                     mainForm.ListWorkersDataGrid.Columns[1].Width = 80;
                     mainForm.ListWorkersDataGrid.Columns[2].Width = 80;
                     mainForm.ListWorkersDataGrid.Columns[3].Width = 90;
                     mainForm.ListWorkersDataGrid.Columns[4].Width = 156;
-                    //mainForm.ListWorkersDataGrid.AutoResizeColumn(3);
                 }
             }
         }
@@ -179,6 +139,50 @@ namespace WhereIsPerson
             mainForm.OrgCmbBox.ValueMember = "Code";
             mainForm.OrgCmbBox.Text = "";
 
+        }
+
+        private void MainForm_selectListWorkersRow(object sender, System.EventArgs e)
+        {
+            if (model.GetConnectionState())
+            {
+                string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString();
+
+                //делаем выборку событий по сотруднику
+                string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '01.06.2019' AND CLI_N = " + id_worker + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
+
+                DataTable resultTable = model.GetData(logtabQuery);
+
+                if (resultTable.Rows.Count > 0)
+                {
+                    resultTable = model.CutData(resultTable, 1, "/"); //обрезаем строку "Сотрудник" оставляя только ФИО
+                    resultTable = model.CutData(resultTable, 2, " "); //обрезаем строку "Событие" удаляя ненужные слова после пробела
+                }
+
+                mainForm.EventsDataGrid.DataSource = resultTable;
+
+                if (resultTable.Rows.Count > 0)
+                {
+                    mainForm.EventsDataGrid.Columns[0].HeaderText = "Дата / время";
+                    mainForm.EventsDataGrid.Columns[1].HeaderText = "Сотрудник";
+                    mainForm.EventsDataGrid.Columns[2].HeaderText = "Событие";
+                    mainForm.EventsDataGrid.Columns[3].HeaderText = "Пост";
+
+                    mainForm.EventsDataGrid.Columns[0].Width = 100;
+                    mainForm.EventsDataGrid.Columns[1].Width = 210;
+                    mainForm.EventsDataGrid.Columns[2].Width = 70;
+                    mainForm.EventsDataGrid.Columns[3].Width = 70;
+                }
+
+                
+
+                //получаем фото из базы
+                if (model.GetPhoto("SELECT PHOTO FROM PHOTOS WHERE CLI_N = " + id_worker, id_worker, "photo"))
+                {
+                    
+
+                    mainForm.PhotoPicBox.Image = model.OpenPhoto(id_worker);
+                }
+            }
         }
     }
 }

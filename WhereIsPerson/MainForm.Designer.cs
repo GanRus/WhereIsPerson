@@ -290,6 +290,7 @@
             this.PhotoPicBox.Location = new System.Drawing.Point(458, 30);
             this.PhotoPicBox.Name = "PhotoPicBox";
             this.PhotoPicBox.Size = new System.Drawing.Size(201, 230);
+            this.PhotoPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PhotoPicBox.TabIndex = 12;
             this.PhotoPicBox.TabStop = false;
             // 
