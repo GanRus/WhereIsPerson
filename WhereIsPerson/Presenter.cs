@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Drawing;
 
 namespace WhereIsPerson
@@ -66,7 +67,7 @@ namespace WhereIsPerson
 
                     string profSubQuery = "(SELECT NAME FROM PROFESSION WHERE PROFESSION_ID = PERSONNEL.PROFESSION_ID) AS PROFESSION";
 
-                    queryString = "SELECT CLI_N, F_NAME, S_NAME, M_NAME, " + profSubQuery + "  FROM PERSONNEL WHERE " + addToQuery + " ORDER BY F_NAME";
+                    queryString = "SELECT CLI_N, F_NAME, S_NAME, M_NAME, " + profSubQuery + " FROM PERSONNEL WHERE " + addToQuery + " AND CLI_N IS NOT NULL ORDER BY F_NAME";
 
                     mainForm.ListWorkersDataGrid.DataSource = model.GetData(queryString); //запрашиваем данные из базы данных
 
@@ -74,7 +75,7 @@ namespace WhereIsPerson
                     mainForm.ListWorkersDataGrid.Columns[1].HeaderText = "Фамилия";
                     mainForm.ListWorkersDataGrid.Columns[2].HeaderText = "Имя";
                     mainForm.ListWorkersDataGrid.Columns[3].HeaderText = "Отчество";
-                    mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Профессия";
+                    mainForm.ListWorkersDataGrid.Columns[4].HeaderText = "Должность";
 
                     mainForm.ListWorkersDataGrid.Columns[1].Width = 80;
                     mainForm.ListWorkersDataGrid.Columns[2].Width = 80;
@@ -145,7 +146,7 @@ namespace WhereIsPerson
         {
             if (model.GetConnectionState())
             {
-                string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString();
+                string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString(); //номер пропуска
 
                 //делаем выборку событий по сотруднику
                 string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '01.06.2019' AND CLI_N = " + id_worker + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
@@ -160,27 +161,75 @@ namespace WhereIsPerson
 
                 mainForm.EventsDataGrid.DataSource = resultTable;
 
-                if (resultTable.Rows.Count > 0)
-                {
-                    mainForm.EventsDataGrid.Columns[0].HeaderText = "Дата / время";
-                    mainForm.EventsDataGrid.Columns[1].HeaderText = "Сотрудник";
-                    mainForm.EventsDataGrid.Columns[2].HeaderText = "Событие";
-                    mainForm.EventsDataGrid.Columns[3].HeaderText = "Пост";
+                mainForm.EventsDataGrid.Columns[0].HeaderText = "Дата / время";
+                mainForm.EventsDataGrid.Columns[1].HeaderText = "Сотрудник";
+                mainForm.EventsDataGrid.Columns[2].HeaderText = "Событие";
+                mainForm.EventsDataGrid.Columns[3].HeaderText = "Пост";
 
-                    mainForm.EventsDataGrid.Columns[0].Width = 100;
-                    mainForm.EventsDataGrid.Columns[1].Width = 210;
-                    mainForm.EventsDataGrid.Columns[2].Width = 70;
-                    mainForm.EventsDataGrid.Columns[3].Width = 70;
-                }
-
-                
+                mainForm.EventsDataGrid.Columns[0].Width = 100;
+                mainForm.EventsDataGrid.Columns[1].Width = 210;
+                mainForm.EventsDataGrid.Columns[2].Width = 70;
+                mainForm.EventsDataGrid.Columns[3].Width = 70;
 
                 //получаем фото из базы
                 if (model.GetPhoto("SELECT PHOTO FROM PHOTOS WHERE CLI_N = " + id_worker, id_worker, "photo"))
                 {
-                    
-
                     mainForm.PhotoPicBox.Image = model.OpenPhoto(id_worker);
+                }
+                else //иначе ставим фото по умолчанию
+                {
+
+                }
+
+                //получаем информацию по сотруднику
+                string profSubQuery = "(SELECT NAME FROM PROFESSION WHERE PROFESSION_ID = PERSONNEL.PROFESSION_ID) AS PROFESSION";
+                string departSubQuery = "(SELECT NAME FROM DEPARTMENT WHERE CODE = PERSONNEL.DEPARTMENT_ID) AS DEPARTMENT";
+
+                string workerQuery = "SELECT USER_ID, CLI_N, F_NAME, S_NAME, M_NAME, " + profSubQuery + ", " + departSubQuery + ", " +
+                                     "PROFESSION_ID, TABN, DATE_BRS, H_ADDR, H_PHONE, M_PHONE, P_NUM, P_ISSUED, P_ISSUEDAY, REGISTRATION, GETTINGDATE, DECISION " +
+                                     "FROM PERSONNEL WHERE CLI_N = " + id_worker;
+
+                resultTable = model.GetData(workerQuery);
+
+                if (mainForm.FIOTxtBox.Text.Length > 0)
+                {
+                    mainForm.FIOTxtBox.Clear();
+                    mainForm.DescriptionTxtBox.Clear();
+                }
+
+                if (resultTable.Rows.Count > 0)
+                {
+                    mainForm.FIOTxtBox.AppendText(resultTable.Rows[0]["F_NAME"].ToString() + " " + resultTable.Rows[0]["S_NAME"].ToString() + " " + resultTable.Rows[0]["M_NAME"].ToString());
+
+                    string date_brs = resultTable.Rows[0]["DATE_BRS"].ToString();
+                    string mphone = resultTable.Rows[0]["M_PHONE"].ToString();
+
+                    if (date_brs != "")
+                    {
+                        date_brs = "Дата рождения: " + date_brs.Substring(0, date_brs.IndexOf(" ")) + Environment.NewLine;
+                    }
+                    if (mphone != "")
+                    {
+                        mphone = "Контактный телефон: " + mphone + Environment.NewLine;
+                    }
+
+                    string profession = "Должность: " + resultTable.Rows[0]["PROFESSION"].ToString() + Environment.NewLine;
+                    string department = "Организация: " + resultTable.Rows[0]["DEPARTMENT"].ToString() + Environment.NewLine;
+                    string cli_n = "Пропуск: № " + resultTable.Rows[0]["CLI_N"].ToString();
+
+                    string gettingdate = resultTable.Rows[0]["GETTINGDATE"].ToString();
+                    gettingdate = " выдан " + gettingdate.Substring(0, 10) + Environment.NewLine; //убираем лишние нули с даты выдачи пропуска
+
+                    string passport = "Паспорт: " + resultTable.Rows[0]["P_NUM"].ToString() + " выдан " + resultTable.Rows[0]["P_ISSUED"].ToString() + ", " +
+                                      resultTable.Rows[0]["P_ISSUEDAY"].ToString().Substring(0, 10) + Environment.NewLine;
+
+                    string address = resultTable.Rows[0]["H_ADDR"].ToString();
+
+                    if (address != "")
+                    {
+                        address = "Адрес прописки: " + address;
+                    }
+                    mainForm.DescriptionTxtBox.AppendText(date_brs + profession + department + cli_n + gettingdate + mphone + passport + address);
                 }
             }
         }

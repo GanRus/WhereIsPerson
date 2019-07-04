@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
 namespace WhereIsPerson
 {
@@ -146,7 +147,14 @@ namespace WhereIsPerson
             {
                 DataTable resultTable = new DataTable();
 
-                da.Fill(resultTable);
+                try
+                {
+                    da.Fill(resultTable);
+                }
+                catch (Exception)
+                {
+                    //написать обработчик событий на неверный запрос
+                }
 
                 return resultTable;
             }
@@ -169,7 +177,12 @@ namespace WhereIsPerson
 
         public bool GetPhoto(string query, string id, string namecolumn)
         {
-            string path = Directory.GetCurrentDirectory() + "\\config.cfg";
+            string path = Directory.GetCurrentDirectory() + "\\Photos\\";
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
 
             using (FbDataAdapter da = new FbDataAdapter(query, dbConnect))
             {

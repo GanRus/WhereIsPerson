@@ -51,11 +51,14 @@
             this.EventsDataGrid = new System.Windows.Forms.DataGridView();
             this.PhotoPicBox = new System.Windows.Forms.PictureBox();
             this.DescriptionTxtBox = new System.Windows.Forms.TextBox();
+            this.DescPanel = new System.Windows.Forms.Panel();
+            this.FIOTxtBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.ListWorkersDataGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SearchGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EventsDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PhotoPicBox)).BeginInit();
+            this.DescPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ListWorkersDataGrid
@@ -287,6 +290,7 @@
             // 
             // PhotoPicBox
             // 
+            this.PhotoPicBox.Image = global::WhereIsPerson.Properties.Resources.empty;
             this.PhotoPicBox.Location = new System.Drawing.Point(458, 30);
             this.PhotoPicBox.Name = "PhotoPicBox";
             this.PhotoPicBox.Size = new System.Drawing.Size(201, 230);
@@ -296,19 +300,47 @@
             // 
             // DescriptionTxtBox
             // 
-            this.DescriptionTxtBox.Location = new System.Drawing.Point(675, 30);
+            this.DescriptionTxtBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.DescriptionTxtBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DescriptionTxtBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.DescriptionTxtBox.Location = new System.Drawing.Point(6, 28);
             this.DescriptionTxtBox.Multiline = true;
             this.DescriptionTxtBox.Name = "DescriptionTxtBox";
-            this.DescriptionTxtBox.Size = new System.Drawing.Size(266, 230);
+            this.DescriptionTxtBox.ReadOnly = true;
+            this.DescriptionTxtBox.Size = new System.Drawing.Size(258, 157);
             this.DescriptionTxtBox.TabIndex = 13;
+            // 
+            // DescPanel
+            // 
+            this.DescPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.DescPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DescPanel.Controls.Add(this.FIOTxtBox);
+            this.DescPanel.Controls.Add(this.DescriptionTxtBox);
+            this.DescPanel.Location = new System.Drawing.Point(671, 30);
+            this.DescPanel.Name = "DescPanel";
+            this.DescPanel.Size = new System.Drawing.Size(270, 230);
+            this.DescPanel.TabIndex = 14;
+            // 
+            // FIOTxtBox
+            // 
+            this.FIOTxtBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.FIOTxtBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.FIOTxtBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FIOTxtBox.Location = new System.Drawing.Point(6, 2);
+            this.FIOTxtBox.Multiline = true;
+            this.FIOTxtBox.Name = "FIOTxtBox";
+            this.FIOTxtBox.ReadOnly = true;
+            this.FIOTxtBox.Size = new System.Drawing.Size(258, 26);
+            this.FIOTxtBox.TabIndex = 14;
             // 
             // MainForm
             // 
             this.AcceptButton = this.SearchBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(957, 547);
-            this.Controls.Add(this.DescriptionTxtBox);
+            this.Controls.Add(this.DescPanel);
             this.Controls.Add(this.PhotoPicBox);
             this.Controls.Add(this.EventsDataGrid);
             this.Controls.Add(this.StateLbl);
@@ -328,6 +360,8 @@
             this.SearchGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EventsDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PhotoPicBox)).EndInit();
+            this.DescPanel.ResumeLayout(false);
+            this.DescPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -357,7 +391,9 @@
         private System.Windows.Forms.Label StateLbl;
         public System.Windows.Forms.DataGridView EventsDataGrid;
         public System.Windows.Forms.PictureBox PhotoPicBox;
-        private System.Windows.Forms.TextBox DescriptionTxtBox;
+        public System.Windows.Forms.TextBox DescriptionTxtBox;
+        private System.Windows.Forms.Panel DescPanel;
+        public System.Windows.Forms.TextBox FIOTxtBox;
     }
 }
 
