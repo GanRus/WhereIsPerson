@@ -18,6 +18,7 @@ namespace WhereIsPerson
         public event EventHandler activeMainForm = null; //событие активации формы
         public event EventHandler pressSearchBtn = null; //нажатие кнопки поиска
         public event EventHandler selectListWorkersRow = null; //выбор работника в списке найденных
+        public event EventHandler enableRealTime = null; //включение режима наблюдения за проходами в режиме реального времени
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -57,6 +58,11 @@ namespace WhereIsPerson
         private void MainForm_Load(object sender, EventArgs e)
         {
             loadMainForm.Invoke(sender, e);
+        }
+
+        private void RealTimeChkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            enableRealTime.Invoke(sender, e);
         }
 
         [DllImport("user32.dll")]

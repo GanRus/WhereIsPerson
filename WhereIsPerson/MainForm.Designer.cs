@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ListWorkersDataGrid = new System.Windows.Forms.DataGridView();
             this.SurnameTxt = new System.Windows.Forms.TextBox();
             this.NameTxt = new System.Windows.Forms.TextBox();
@@ -53,6 +55,8 @@
             this.DescriptionTxtBox = new System.Windows.Forms.TextBox();
             this.DescPanel = new System.Windows.Forms.Panel();
             this.FIOTxtBox = new System.Windows.Forms.TextBox();
+            this.RealTimeChkBox = new System.Windows.Forms.CheckBox();
+            this.LogQueryTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ListWorkersDataGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SearchGroupBox.SuspendLayout();
@@ -68,13 +72,13 @@
             this.ListWorkersDataGrid.AllowUserToResizeColumns = false;
             this.ListWorkersDataGrid.AllowUserToResizeRows = false;
             this.ListWorkersDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ListWorkersDataGrid.Location = new System.Drawing.Point(16, 30);
+            this.ListWorkersDataGrid.Location = new System.Drawing.Point(16, 29);
             this.ListWorkersDataGrid.MultiSelect = false;
             this.ListWorkersDataGrid.Name = "ListWorkersDataGrid";
             this.ListWorkersDataGrid.ReadOnly = true;
             this.ListWorkersDataGrid.RowHeadersVisible = false;
             this.ListWorkersDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ListWorkersDataGrid.Size = new System.Drawing.Size(426, 230);
+            this.ListWorkersDataGrid.Size = new System.Drawing.Size(426, 243);
             this.ListWorkersDataGrid.TabIndex = 0;
             this.ListWorkersDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ListWorkersDataGrid_CellClick);
             this.ListWorkersDataGrid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListWorkersDataGrid_KeyPress);
@@ -140,7 +144,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(-6, 3);
+            this.menuStrip1.Location = new System.Drawing.Point(2, 4);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(61, 24);
             this.menuStrip1.TabIndex = 7;
@@ -183,7 +187,7 @@
             this.SearchGroupBox.Controls.Add(this.NameLbl);
             this.SearchGroupBox.Controls.Add(this.PatronymicLbl);
             this.SearchGroupBox.Controls.Add(this.SurnameLbl);
-            this.SearchGroupBox.Location = new System.Drawing.Point(16, 268);
+            this.SearchGroupBox.Location = new System.Drawing.Point(16, 277);
             this.SearchGroupBox.Name = "SearchGroupBox";
             this.SearchGroupBox.Size = new System.Drawing.Size(426, 256);
             this.SearchGroupBox.TabIndex = 8;
@@ -260,7 +264,7 @@
             // 
             this.MessageLbl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.MessageLbl.AutoSize = true;
-            this.MessageLbl.Location = new System.Drawing.Point(90, 530);
+            this.MessageLbl.Location = new System.Drawing.Point(78, 537);
             this.MessageLbl.Name = "MessageLbl";
             this.MessageLbl.Size = new System.Drawing.Size(0, 13);
             this.MessageLbl.TabIndex = 9;
@@ -268,7 +272,7 @@
             // StateLbl
             // 
             this.StateLbl.AutoSize = true;
-            this.StateLbl.Location = new System.Drawing.Point(19, 530);
+            this.StateLbl.Location = new System.Drawing.Point(14, 537);
             this.StateLbl.Name = "StateLbl";
             this.StateLbl.Size = new System.Drawing.Size(64, 13);
             this.StateLbl.TabIndex = 10;
@@ -281,19 +285,19 @@
             this.EventsDataGrid.AllowUserToResizeColumns = false;
             this.EventsDataGrid.AllowUserToResizeRows = false;
             this.EventsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.EventsDataGrid.Location = new System.Drawing.Point(458, 276);
+            this.EventsDataGrid.Location = new System.Drawing.Point(457, 283);
             this.EventsDataGrid.Name = "EventsDataGrid";
             this.EventsDataGrid.RowHeadersVisible = false;
             this.EventsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.EventsDataGrid.Size = new System.Drawing.Size(483, 244);
+            this.EventsDataGrid.Size = new System.Drawing.Size(484, 221);
             this.EventsDataGrid.TabIndex = 11;
             // 
             // PhotoPicBox
             // 
             this.PhotoPicBox.Image = global::WhereIsPerson.Properties.Resources.empty;
-            this.PhotoPicBox.Location = new System.Drawing.Point(458, 30);
+            this.PhotoPicBox.Location = new System.Drawing.Point(457, 30);
             this.PhotoPicBox.Name = "PhotoPicBox";
-            this.PhotoPicBox.Size = new System.Drawing.Size(201, 230);
+            this.PhotoPicBox.Size = new System.Drawing.Size(207, 242);
             this.PhotoPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PhotoPicBox.TabIndex = 12;
             this.PhotoPicBox.TabStop = false;
@@ -318,7 +322,7 @@
             this.DescPanel.Controls.Add(this.DescriptionTxtBox);
             this.DescPanel.Location = new System.Drawing.Point(671, 30);
             this.DescPanel.Name = "DescPanel";
-            this.DescPanel.Size = new System.Drawing.Size(270, 230);
+            this.DescPanel.Size = new System.Drawing.Size(270, 242);
             this.DescPanel.TabIndex = 14;
             // 
             // FIOTxtBox
@@ -333,13 +337,29 @@
             this.FIOTxtBox.Size = new System.Drawing.Size(258, 26);
             this.FIOTxtBox.TabIndex = 14;
             // 
+            // RealTimeChkBox
+            // 
+            this.RealTimeChkBox.AutoSize = true;
+            this.RealTimeChkBox.Location = new System.Drawing.Point(465, 512);
+            this.RealTimeChkBox.Name = "RealTimeChkBox";
+            this.RealTimeChkBox.Size = new System.Drawing.Size(289, 17);
+            this.RealTimeChkBox.TabIndex = 15;
+            this.RealTimeChkBox.Text = "Отображать проходы в режиме реального времени";
+            this.RealTimeChkBox.UseVisualStyleBackColor = true;
+            this.RealTimeChkBox.CheckedChanged += new System.EventHandler(this.RealTimeChkBox_CheckedChanged);
+            // 
+            // LogQueryTimer
+            // 
+            this.LogQueryTimer.Interval = 5000;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SearchBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
-            this.ClientSize = new System.Drawing.Size(957, 547);
+            this.ClientSize = new System.Drawing.Size(957, 555);
+            this.Controls.Add(this.RealTimeChkBox);
             this.Controls.Add(this.DescPanel);
             this.Controls.Add(this.PhotoPicBox);
             this.Controls.Add(this.EventsDataGrid);
@@ -348,6 +368,7 @@
             this.Controls.Add(this.SearchGroupBox);
             this.Controls.Add(this.ListWorkersDataGrid);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "WhereIsPerson";
@@ -394,6 +415,8 @@
         public System.Windows.Forms.TextBox DescriptionTxtBox;
         private System.Windows.Forms.Panel DescPanel;
         public System.Windows.Forms.TextBox FIOTxtBox;
+        public System.Windows.Forms.CheckBox RealTimeChkBox;
+        public System.Windows.Forms.Timer LogQueryTimer;
     }
 }
 

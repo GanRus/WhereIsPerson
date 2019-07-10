@@ -8,6 +8,7 @@ namespace WhereIsPerson
     {
         private MainForm mainForm;
         public Model model = null;
+        string id_worker_glob;
 
         public Presenter(MainForm mainForm)
         {
@@ -17,6 +18,48 @@ namespace WhereIsPerson
             this.mainForm.activeMainForm += MainForm_activeMainForm;
             this.mainForm.pressSearchBtn += MainForm_pressSearchBtn;
             this.mainForm.selectListWorkersRow += MainForm_selectListWorkersRow;
+            this.mainForm.enableRealTime += MainForm_enableRealTime;
+        }
+
+        private void MainForm_enableRealTime(object sender, EventArgs e)
+        {
+            if (mainForm.RealTimeChkBox.Checked)
+            {
+                if (model.GetConnectionState() && mainForm.ListWorkersDataGrid.RowCount > 0)
+                {
+                    string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString(); //номер пропуска
+                    id_worker_glob = id_worker; //сохраняем в глобальной переменной, для последующей передачи в метод обработчик события tick
+
+                    if (id_worker != "")
+                    {
+                        mainForm.LogQueryTimer.Tick += GetLogTab;
+                        mainForm.LogQueryTimer.Start();
+                    }
+                }
+            }
+            else
+            {
+                mainForm.LogQueryTimer.Stop();
+                mainForm.LogQueryTimer.Tick -= GetLogTab;
+            }
+        }
+
+        private void GetLogTab(object sender, EventArgs e)
+        {
+            if (mainForm.RealTimeChkBox.Checked && id_worker_glob != "")
+            {
+                string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '" + DateTime.Today + "' AND CLI_N = " + id_worker_glob + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
+
+                DataTable resultTable = model.GetData(logtabQuery);
+
+                if (resultTable.Rows.Count > 0)
+                {
+                    resultTable = model.CutData(resultTable, 1, "/"); //обрезаем строку "Сотрудник" оставляя только ФИО
+                    resultTable = model.CutData(resultTable, 2, " "); //обрезаем строку "Событие" удаляя ненужные слова после пробела
+                }
+
+                mainForm.EventsDataGrid.DataSource = resultTable;
+            }
         }
 
         private void MainForm_pressSearchBtn(object sender, System.EventArgs e)
@@ -144,12 +187,20 @@ namespace WhereIsPerson
 
         private void MainForm_selectListWorkersRow(object sender, System.EventArgs e)
         {
+            if (mainForm.RealTimeChkBox.Checked) //если включен режим слежения в реальном времени, то выключаем его
+            {
+                mainForm.RealTimeChkBox.Checked = false;
+                mainForm.LogQueryTimer.Stop();
+                mainForm.LogQueryTimer.Tick -= GetLogTab;
+                id_worker_glob = "";
+            }
+
             if (model.GetConnectionState())
             {
                 string id_worker = mainForm.ListWorkersDataGrid.CurrentRow.Cells[0].Value.ToString(); //номер пропуска
 
                 //делаем выборку событий по сотруднику
-                string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '01.06.2019' AND CLI_N = " + id_worker + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
+                string logtabQuery = "SELECT DT, CLI_TEXT, EV_TEXT, OBJ_TEXT FROM LOGTAB WHERE DT >= '" + DateTime.Today + "' AND CLI_N = " + id_worker + " AND (EV_N = 7 or EV_N = 8) ORDER BY DT DESC";
 
                 DataTable resultTable = model.GetData(logtabQuery);
 
@@ -168,17 +219,13 @@ namespace WhereIsPerson
 
                 mainForm.EventsDataGrid.Columns[0].Width = 100;
                 mainForm.EventsDataGrid.Columns[1].Width = 210;
-                mainForm.EventsDataGrid.Columns[2].Width = 70;
-                mainForm.EventsDataGrid.Columns[3].Width = 70;
+                mainForm.EventsDataGrid.Columns[2].Width = 75;
+                mainForm.EventsDataGrid.Columns[3].Width = 75;
 
                 //получаем фото из базы
                 if (model.GetPhoto("SELECT PHOTO FROM PHOTOS WHERE CLI_N = " + id_worker, id_worker, "photo"))
                 {
                     mainForm.PhotoPicBox.Image = model.OpenPhoto(id_worker);
-                }
-                else //иначе ставим фото по умолчанию
-                {
-
                 }
 
                 //получаем информацию по сотруднику
