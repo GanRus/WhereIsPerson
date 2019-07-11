@@ -57,6 +57,7 @@
             this.FIOTxtBox = new System.Windows.Forms.TextBox();
             this.RealTimeChkBox = new System.Windows.Forms.CheckBox();
             this.LogQueryTimer = new System.Windows.Forms.Timer(this.components);
+            this.BeepChkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ListWorkersDataGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SearchGroupBox.SuspendLayout();
@@ -86,7 +87,7 @@
             // SurnameTxt
             // 
             this.SurnameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SurnameTxt.Location = new System.Drawing.Point(160, 23);
+            this.SurnameTxt.Location = new System.Drawing.Point(160, 28);
             this.SurnameTxt.Name = "SurnameTxt";
             this.SurnameTxt.Size = new System.Drawing.Size(250, 26);
             this.SurnameTxt.TabIndex = 1;
@@ -94,7 +95,7 @@
             // NameTxt
             // 
             this.NameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.NameTxt.Location = new System.Drawing.Point(160, 60);
+            this.NameTxt.Location = new System.Drawing.Point(160, 65);
             this.NameTxt.Name = "NameTxt";
             this.NameTxt.Size = new System.Drawing.Size(250, 26);
             this.NameTxt.TabIndex = 2;
@@ -102,7 +103,7 @@
             // PatronymicTxt
             // 
             this.PatronymicTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.PatronymicTxt.Location = new System.Drawing.Point(160, 97);
+            this.PatronymicTxt.Location = new System.Drawing.Point(160, 102);
             this.PatronymicTxt.Name = "PatronymicTxt";
             this.PatronymicTxt.Size = new System.Drawing.Size(250, 26);
             this.PatronymicTxt.TabIndex = 3;
@@ -111,7 +112,7 @@
             // 
             this.NameLbl.AutoSize = true;
             this.NameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.NameLbl.Location = new System.Drawing.Point(13, 29);
+            this.NameLbl.Location = new System.Drawing.Point(13, 34);
             this.NameLbl.Name = "NameLbl";
             this.NameLbl.Size = new System.Drawing.Size(70, 17);
             this.NameLbl.TabIndex = 4;
@@ -121,7 +122,7 @@
             // 
             this.SurnameLbl.AutoSize = true;
             this.SurnameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SurnameLbl.Location = new System.Drawing.Point(13, 65);
+            this.SurnameLbl.Location = new System.Drawing.Point(13, 70);
             this.SurnameLbl.Name = "SurnameLbl";
             this.SurnameLbl.Size = new System.Drawing.Size(35, 17);
             this.SurnameLbl.TabIndex = 5;
@@ -131,7 +132,7 @@
             // 
             this.PatronymicLbl.AutoSize = true;
             this.PatronymicLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.PatronymicLbl.Location = new System.Drawing.Point(13, 101);
+            this.PatronymicLbl.Location = new System.Drawing.Point(13, 106);
             this.PatronymicLbl.Name = "PatronymicLbl";
             this.PatronymicLbl.Size = new System.Drawing.Size(71, 17);
             this.PatronymicLbl.TabIndex = 6;
@@ -144,7 +145,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(2, 4);
+            this.menuStrip1.Location = new System.Drawing.Point(2, 7);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(61, 24);
             this.menuStrip1.TabIndex = 7;
@@ -189,7 +190,7 @@
             this.SearchGroupBox.Controls.Add(this.SurnameLbl);
             this.SearchGroupBox.Location = new System.Drawing.Point(16, 277);
             this.SearchGroupBox.Name = "SearchGroupBox";
-            this.SearchGroupBox.Size = new System.Drawing.Size(426, 256);
+            this.SearchGroupBox.Size = new System.Drawing.Size(426, 262);
             this.SearchGroupBox.TabIndex = 8;
             this.SearchGroupBox.TabStop = false;
             this.SearchGroupBox.Text = "Параметры поиска";
@@ -197,7 +198,7 @@
             // ClearBtn
             // 
             this.ClearBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ClearBtn.Location = new System.Drawing.Point(126, 220);
+            this.ClearBtn.Location = new System.Drawing.Point(122, 220);
             this.ClearBtn.Name = "ClearBtn";
             this.ClearBtn.Size = new System.Drawing.Size(90, 30);
             this.ClearBtn.TabIndex = 12;
@@ -208,7 +209,7 @@
             // SearchBtn
             // 
             this.SearchBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SearchBtn.Location = new System.Drawing.Point(18, 220);
+            this.SearchBtn.Location = new System.Drawing.Point(14, 220);
             this.SearchBtn.Name = "SearchBtn";
             this.SearchBtn.Size = new System.Drawing.Size(90, 30);
             this.SearchBtn.TabIndex = 11;
@@ -220,7 +221,7 @@
             // 
             this.OrgranisationLbl.AutoSize = true;
             this.OrgranisationLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.OrgranisationLbl.Location = new System.Drawing.Point(13, 179);
+            this.OrgranisationLbl.Location = new System.Drawing.Point(13, 184);
             this.OrgranisationLbl.Name = "OrgranisationLbl";
             this.OrgranisationLbl.Size = new System.Drawing.Size(95, 17);
             this.OrgranisationLbl.TabIndex = 10;
@@ -230,7 +231,7 @@
             // 
             this.ProfessionLbl.AutoSize = true;
             this.ProfessionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ProfessionLbl.Location = new System.Drawing.Point(12, 140);
+            this.ProfessionLbl.Location = new System.Drawing.Point(12, 145);
             this.ProfessionLbl.Name = "ProfessionLbl";
             this.ProfessionLbl.Size = new System.Drawing.Size(109, 17);
             this.ProfessionLbl.TabIndex = 9;
@@ -242,7 +243,7 @@
             this.OrgCmbBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.OrgCmbBox.FormattingEnabled = true;
             this.OrgCmbBox.IntegralHeight = false;
-            this.OrgCmbBox.Location = new System.Drawing.Point(160, 173);
+            this.OrgCmbBox.Location = new System.Drawing.Point(160, 178);
             this.OrgCmbBox.Name = "OrgCmbBox";
             this.OrgCmbBox.Size = new System.Drawing.Size(250, 28);
             this.OrgCmbBox.TabIndex = 8;
@@ -254,7 +255,7 @@
             this.ProfCmbBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ProfCmbBox.FormattingEnabled = true;
             this.ProfCmbBox.IntegralHeight = false;
-            this.ProfCmbBox.Location = new System.Drawing.Point(160, 134);
+            this.ProfCmbBox.Location = new System.Drawing.Point(160, 139);
             this.ProfCmbBox.Name = "ProfCmbBox";
             this.ProfCmbBox.Size = new System.Drawing.Size(250, 28);
             this.ProfCmbBox.TabIndex = 7;
@@ -264,7 +265,7 @@
             // 
             this.MessageLbl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.MessageLbl.AutoSize = true;
-            this.MessageLbl.Location = new System.Drawing.Point(78, 537);
+            this.MessageLbl.Location = new System.Drawing.Point(76, 542);
             this.MessageLbl.Name = "MessageLbl";
             this.MessageLbl.Size = new System.Drawing.Size(0, 13);
             this.MessageLbl.TabIndex = 9;
@@ -272,7 +273,7 @@
             // StateLbl
             // 
             this.StateLbl.AutoSize = true;
-            this.StateLbl.Location = new System.Drawing.Point(14, 537);
+            this.StateLbl.Location = new System.Drawing.Point(14, 542);
             this.StateLbl.Name = "StateLbl";
             this.StateLbl.Size = new System.Drawing.Size(64, 13);
             this.StateLbl.TabIndex = 10;
@@ -340,7 +341,7 @@
             // RealTimeChkBox
             // 
             this.RealTimeChkBox.AutoSize = true;
-            this.RealTimeChkBox.Location = new System.Drawing.Point(465, 512);
+            this.RealTimeChkBox.Location = new System.Drawing.Point(460, 507);
             this.RealTimeChkBox.Name = "RealTimeChkBox";
             this.RealTimeChkBox.Size = new System.Drawing.Size(289, 17);
             this.RealTimeChkBox.TabIndex = 15;
@@ -352,13 +353,24 @@
             // 
             this.LogQueryTimer.Interval = 5000;
             // 
+            // BeepChkBox
+            // 
+            this.BeepChkBox.AutoSize = true;
+            this.BeepChkBox.Location = new System.Drawing.Point(460, 524);
+            this.BeepChkBox.Name = "BeepChkBox";
+            this.BeepChkBox.Size = new System.Drawing.Size(216, 17);
+            this.BeepChkBox.TabIndex = 16;
+            this.BeepChkBox.Text = "Оповещать звуком о новых проходах";
+            this.BeepChkBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.SearchBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
-            this.ClientSize = new System.Drawing.Size(957, 555);
+            this.ClientSize = new System.Drawing.Size(957, 560);
+            this.Controls.Add(this.BeepChkBox);
             this.Controls.Add(this.RealTimeChkBox);
             this.Controls.Add(this.DescPanel);
             this.Controls.Add(this.PhotoPicBox);
@@ -371,7 +383,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "WhereIsPerson";
+            this.Text = "Поиск работника на строительной площадке";
             this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ListWorkersDataGrid)).EndInit();
@@ -417,6 +429,7 @@
         public System.Windows.Forms.TextBox FIOTxtBox;
         public System.Windows.Forms.CheckBox RealTimeChkBox;
         public System.Windows.Forms.Timer LogQueryTimer;
+        public System.Windows.Forms.CheckBox BeepChkBox;
     }
 }
 

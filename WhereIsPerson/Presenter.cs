@@ -8,7 +8,9 @@ namespace WhereIsPerson
     {
         private MainForm mainForm;
         public Model model = null;
-        string id_worker_glob;
+        string id_worker_glob; //идентификатор текущего выбранного работника
+        int count_events = 0; //количество проходов текущего работника
+        bool first_show = true; //используется чтобы при первом получении выборки в реальном времени не использовался звуковой сигнал
 
         public Presenter(MainForm mainForm)
         {
@@ -41,6 +43,8 @@ namespace WhereIsPerson
             {
                 mainForm.LogQueryTimer.Stop();
                 mainForm.LogQueryTimer.Tick -= GetLogTab;
+                count_events = 0;
+                first_show = true;
             }
         }
 
@@ -59,6 +63,20 @@ namespace WhereIsPerson
                 }
 
                 mainForm.EventsDataGrid.DataSource = resultTable;
+
+                if (count_events < resultTable.Rows.Count) //если добавилось новое событие, выводим окно на передний план
+                {
+                    count_events = resultTable.Rows.Count;
+                    if (!first_show)
+                    {
+                        mainForm.Activate();
+                        if (mainForm.BeepChkBox.Checked)
+                        {
+                            Console.Beep(1000, 1000);
+                        }
+                    }
+                    if (first_show) { first_show = false; }
+                }
             }
         }
 
@@ -173,16 +191,18 @@ namespace WhereIsPerson
                 mainForm.MessageLbl.Text = "Не удалось найти настройки подключения к БД";
             }
 
-            mainForm.ProfCmbBox.DataSource = model.GetData("SELECT PROFESSION_ID, NAME FROM PROFESSION ORDER BY NAME");
-            mainForm.ProfCmbBox.DisplayMember = "Name";
-            mainForm.ProfCmbBox.ValueMember = "Profession_id";
-            mainForm.ProfCmbBox.Text = "";
+            if (model.GetConnectionState())
+            {
+                mainForm.ProfCmbBox.DataSource = model.GetData("SELECT PROFESSION_ID, NAME FROM PROFESSION ORDER BY NAME");
+                mainForm.ProfCmbBox.DisplayMember = "Name";
+                mainForm.ProfCmbBox.ValueMember = "Profession_id";
+                mainForm.ProfCmbBox.Text = "";
 
-            mainForm.OrgCmbBox.DataSource = model.GetData("SELECT CODE, NAME FROM DEPARTMENT ORDER BY NAME");
-            mainForm.OrgCmbBox.DisplayMember = "Name";
-            mainForm.OrgCmbBox.ValueMember = "Code";
-            mainForm.OrgCmbBox.Text = "";
-
+                mainForm.OrgCmbBox.DataSource = model.GetData("SELECT CODE, NAME FROM DEPARTMENT ORDER BY NAME");
+                mainForm.OrgCmbBox.DisplayMember = "Name";
+                mainForm.OrgCmbBox.ValueMember = "Code";
+                mainForm.OrgCmbBox.Text = "";
+            }
         }
 
         private void MainForm_selectListWorkersRow(object sender, System.EventArgs e)
@@ -190,9 +210,12 @@ namespace WhereIsPerson
             if (mainForm.RealTimeChkBox.Checked) //если включен режим слежения в реальном времени, то выключаем его
             {
                 mainForm.RealTimeChkBox.Checked = false;
+                mainForm.BeepChkBox.Checked = false;
                 mainForm.LogQueryTimer.Stop();
                 mainForm.LogQueryTimer.Tick -= GetLogTab;
                 id_worker_glob = "";
+                count_events = 0;
+                first_show = true;
             }
 
             if (model.GetConnectionState())
